@@ -80,13 +80,13 @@ int CDuplex::StartRunDuplex(int a)
 	//LedFlag = 0;
 	StopFlag = 0;
 
-	hThread = CreateThread(NULL,
-												0,
-												(LPTHREAD_START_ROUTINE)ThreadFunc,
-												this,
-												0,
-												&ThreadID); //开辟一个线程
-
+//	hThread = CreateThread(NULL,
+//												0,
+	//											(LPTHREAD_START_ROUTINE)ThreadFunc,
+		//										this,
+			//									0,
+				//								&ThreadID); //开辟一个线程
+	AfxBeginThread(ThreadFunc, NULL);
 	return 0; //定义的是有返回值的函数，所以需要return 0
 }
 void CDuplex::OnBnClickedOk()
@@ -353,8 +353,8 @@ void CDuplex::OnBnClickedOk()
 //	CDialogEx::OnOK();
 }
 
-
-void ThreadFunc(LPVOID lpParam)
+//void ThreadFunc(LPVOID lpParam)
+UINT ThreadFunc(LPVOID lpParam)
 {
 
 	//SetLedOff(1);
@@ -803,6 +803,7 @@ void ThreadFunc(LPVOID lpParam)
 		pDlg->SetLedOff(1); //将LED灯置黑
 		break;
 	}
+	return 0;
 }
 
 

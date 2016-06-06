@@ -2,7 +2,8 @@
 #include "afxwin.h"
 #include "ParameterSet.h"
 
-void ThreadFunc(LPVOID lpParam); //类外声明线程函数
+UINT __cdecl ThreadFunc(LPVOID lpParam);
+//void ThreadFunc(LPVOID lpParam); //类外声明线程函数
 void SystemTime(); //获取系统时间
 
 // CDuplex 对话框
