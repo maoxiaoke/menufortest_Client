@@ -118,12 +118,12 @@ void ThreadFunc(LPVOID lpParam)
 		switch (pDlg->DuplexState)
 		{
 		case 31:
-			pDlg->state_starthail = 1;
-			pDlg->m_led3.SetBitmap(pDlg->m_red);
+			pDlg->state_starthail = 1;			
 			pDlg->SystemTime();
 				
 			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
 			ppDlg->m_Hist.ReplaceSel(_T("开始载波同步\r\n"));
+			pDlg->m_led3.SetBitmap(pDlg->m_red);
 			Sleep(1000);
 
 			pDlg->DuplexState = 32;
@@ -131,22 +131,22 @@ void ThreadFunc(LPVOID lpParam)
 
 		case 32:
 			pDlg->state_hailacquisition = 1;
-			pDlg->m_led4.SetBitmap(pDlg->m_red);
 			pDlg->SystemTime();
 
 			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
 			ppDlg->m_Hist.ReplaceSel(_T("发送捕获序列\r\n"));
+			pDlg->m_led4.SetBitmap(pDlg->m_red);
 			Sleep(400);
 
 			pDlg->DuplexState = 33;
 			break;
 		case 33:
-			pDlg->state_haildirectives = 1;
-			pDlg->m_led5.SetBitmap(pDlg->m_red);
+			pDlg->state_haildirectives = 1;		
 			pDlg->SystemTime();
 
 			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
 			ppDlg->m_Hist.ReplaceSel(_T("发送握手指令\r\n"));
+			pDlg->m_led5.SetBitmap(pDlg->m_red);
 			
 			//向响应方发送握手指令
 			HallCommond = 1;
@@ -165,11 +165,11 @@ void ThreadFunc(LPVOID lpParam)
 			break;
 		case 34:
 			pDlg->state_hailtail = 1;
-			pDlg->m_led6.SetBitmap(pDlg->m_red);
 			pDlg->SystemTime();
 
 			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
 			ppDlg->m_Hist.ReplaceSel(_T("发送握手尾序列\r\n"));
+			pDlg->m_led6.SetBitmap(pDlg->m_red);
 			Sleep(50);
 
 			pDlg->DuplexState = 35;
@@ -180,6 +180,7 @@ void ThreadFunc(LPVOID lpParam)
 
 			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
 			ppDlg->m_Hist.ReplaceSel(_T("等待握手响应\r\n"));
+			
 
 //			validframeflag = 1;
 //			Hailresponse_R = 1;
@@ -192,8 +193,8 @@ void ThreadFunc(LPVOID lpParam)
 //				if (validframeflag == 1)
 				{
 					Hailresponse_R = 0;
-
 					pDlg->m_led7.SetBitmap(pDlg->m_red);
+
 					pDlg->DuplexState = 41;
 					break;
 				}
@@ -216,23 +217,23 @@ void ThreadFunc(LPVOID lpParam)
 			}
 			break;
 		case 41:
-			pDlg->state_carrieronly = 1;
-			pDlg->m_led8.SetBitmap(pDlg->m_red);
+			pDlg->state_carrieronly = 1;			
 			pDlg->SystemTime();
 
 			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
 			ppDlg->m_Hist.ReplaceSel(_T("载波同步\r\n"));
+			pDlg->m_led8.SetBitmap(pDlg->m_red);
 			Sleep(1000);
 
 			pDlg->DuplexState = 42;
 			break;
 		case 42:
-			pDlg->state_acquisition = 1;
-			pDlg->m_led9.SetBitmap(pDlg->m_red);
+			pDlg->state_acquisition = 1;			
 			pDlg->SystemTime();
 
 			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
 			ppDlg->m_Hist.ReplaceSel(_T("发送空闲序列\r\n"));
+			pDlg->m_led9.SetBitmap(pDlg->m_red);
 			Sleep(400);
 
 			pDlg->DuplexState = 40;
@@ -240,19 +241,19 @@ void ThreadFunc(LPVOID lpParam)
 
 		case 40:
 			pDlg->state_duplexon = 1;
-			pDlg->m_led10.SetBitmap(pDlg->m_red);
 			pDlg->SystemTime();
 
 			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
 			ppDlg->m_Hist.ReplaceSel(_T("双向数据传递\r\n"));
+			pDlg->m_led10.SetBitmap(pDlg->m_red);
 
 			pDlg->shuanggongsend();
 
 			pDlg->state_lnmdend = 1;
-			pDlg->m_led11.SetBitmap(pDlg->m_red);
 			pDlg->SystemTime();
 			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
 			ppDlg->m_Hist.ReplaceSel(_T("本地发送完成\r\n"));
+			pDlg->m_led11.SetBitmap(pDlg->m_red);
 
 			//发送本地无数据发送指令
 			SetControlParameters = 1;
@@ -277,26 +278,26 @@ void ThreadFunc(LPVOID lpParam)
 					}*/
 			}
 
-			pDlg->state_rnmdend = 1;
-			pDlg->m_led12.SetBitmap(pDlg->m_red);
+			pDlg->state_rnmdend = 1;			
 			pDlg->SystemTime();
 			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
 			ppDlg->m_Hist.ReplaceSel(_T("远程发送完成\r\n"));
+			pDlg->m_led12.SetBitmap(pDlg->m_red);
 
 			pDlg->state_duplexend = 1;
-			pDlg->m_led13.SetBitmap(pDlg->m_red);
 			pDlg->SystemTime();
 			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
 			ppDlg->m_Hist.ReplaceSel(_T("数据发送完成\r\n"));
+			pDlg->m_led13.SetBitmap(pDlg->m_red);
 
 			pDlg->DuplexState = 45;
 			break;
 		case 45:
-			pDlg->state_terminatingtail = 1;
-			pDlg->m_led14.SetBitmap(pDlg->m_red);
+			pDlg->state_terminatingtail = 1;			
 			pDlg->SystemTime();
 			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
 			ppDlg->m_Hist.ReplaceSel(_T("发送尾序列\r\n"));
+			pDlg->m_led14.SetBitmap(pDlg->m_red);
 			Sleep(50);
 			break;
 		
