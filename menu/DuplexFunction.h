@@ -14,7 +14,7 @@ int state_rnmdend;			  //远程发送成功
 int state_lnmdend;				 //本地发送成功
 int state_duplexend;			  //双向数据传递完成
 int state_terminatingtail;	  //尾序列
-static int StopFlag;				 //强制停止的标志变量 ?
+static int StopFlag;				 //强制停止的标志变量 
 
 int lnmdsign;						//本地发送完成标志
 int rnmdsign;					//远程发送完成标志

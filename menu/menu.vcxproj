@@ -154,6 +154,12 @@
     <None Include="res\menu.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\Documents\Visual Studio 2013\Projects\menu\menu\res\7291.bmp" />
+    <Image Include="..\..\Documents\Visual Studio 2013\Projects\menu\menu\res\72915.bmp" />
+    <Image Include="..\..\Documents\Visual Studio 2013\Projects\menu\menu\res\72916.bmp" />
+    <Image Include="..\..\Documents\Visual Studio 2013\Projects\menu\menu\res\72922.bmp" />
+    <Image Include="..\..\Documents\Visual Studio 2013\Projects\menu\menu\res\7295.bmp" />
+    <Image Include="..\..\Documents\Visual Studio 2013\Projects\menu\menu\res\7297.bmp" />
     <Image Include="..\..\menu\menu\res\7291.bmp" />
     <Image Include="..\..\menu\menu\res\72915.bmp" />
     <Image Include="..\..\menu\menu\res\72916.bmp" />
