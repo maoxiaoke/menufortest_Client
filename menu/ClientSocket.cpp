@@ -60,8 +60,8 @@ void CClientSocket::OnReceive(int nErrorCode)
 	int *Protocoldata;
 	int *szTemp;
 	int Errorbit = 0;
-	szTemp = (int*)malloc(5000 * sizeof(int)); //预备5000个数据的量
-	int n = Receive(szTemp, 5000 * sizeof(int)); //收到的数据，返回收到的字节数
+	szTemp = (int*)malloc(10000 * sizeof(int)); //预备5000个数据的量
+	int n = Receive(szTemp, 10000 * sizeof(int)); //收到的数据，返回收到的字节数
 
 	int datalen = n / (sizeof(int)) - 1;
 	int *PE;

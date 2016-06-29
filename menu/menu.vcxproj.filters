@@ -268,5 +268,23 @@
     <Image Include="..\..\menu\menu\res\72922.bmp">
       <Filter>资源文件</Filter>
     </Image>
+    <Image Include="..\..\Documents\Visual Studio 2013\Projects\menu\menu\res\7295.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Documents\Visual Studio 2013\Projects\menu\menu\res\7297.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Documents\Visual Studio 2013\Projects\menu\menu\res\7291.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Documents\Visual Studio 2013\Projects\menu\menu\res\72916.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Documents\Visual Studio 2013\Projects\menu\menu\res\72915.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\Documents\Visual Studio 2013\Projects\menu\menu\res\72922.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
   </ItemGroup>
 </Project>
