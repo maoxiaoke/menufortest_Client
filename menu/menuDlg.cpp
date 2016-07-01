@@ -103,6 +103,9 @@ ON_WM_SIZE()
 ON_COMMAND(ID_SendMail, &CmenuDlg::OnSendmail)
 ON_COMMAND(ID_StatusDisplay, &CmenuDlg::OnStatusdisplay)
 ON_COMMAND(ID_ParaSet, &CmenuDlg::OnParaset)
+ON_COMMAND(ID_LOGOUT, &CmenuDlg::OnLogout)
+//ON_BN_CLICKED(IDOK, &CmenuDlg::OnBnClickedOk)
+ON_BN_CLICKED(IDC_CLEANUP_BUTTON, &CmenuDlg::OnBnClickedCleanupButton)
 END_MESSAGE_MAP()
 
 
@@ -160,11 +163,16 @@ BOOL CmenuDlg::OnInitDialog()
 	m_menu.LoadMenu(IDR_MENU1);
 	SetMenu(&m_menu);
 
+	//加载默认配置
+	/* 待补充 */
+
 	/********************************设置字体******************************************/
-	font.CreatePointFont(100, _T("微软雅黑")); //创建字体样式，传递120请求12点字体
+	font.CreatePointFont(100, _T("微软雅黑")); //创建字体样式，传递100请求10点字体
 	GetDlgItem(IDC_RECODE_STATIC)->SetFont(&font); //将字体传递给静态框
 	GetDlgItem(IDC_IP_STATIC)->SetFont(&font); //将字体传递给静态框
 	GetDlgItem(IDC_PORT_STATIC)->SetFont(&font); //将字体传递给静态框
+	font.CreatePointFont(120, _T("微软雅黑")); //创建字体样式，传递120请求12点字体
+	GetDlgItem(IDC_NUAA_STATIC)->SetFont(&font); //将字体传递给静态框
 
 
 	//添加热键
@@ -303,8 +311,8 @@ void CmenuDlg::OnPaint()
 {
 	
 
-	if (IsIconic())
-	{
+//	if (IsIconic())
+//	{
 		CPaintDC dc(this); // 用于绘制的设备上下文
 
 //		SendMessage(*WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()));
@@ -319,11 +327,36 @@ void CmenuDlg::OnPaint()
 
 		// 绘制图标
 		dc.DrawIcon(x, y, m_hIcon);
-	}
-	else
-	{
-		CDialogEx::OnPaint();
-	}
+
+		//
+		
+
+	//}
+	//else
+	//{
+	//	CDialogEx::OnPaint();
+	//}
+
+	//CPaintDC dc(this); // 用于绘制的设备上下文
+	CPen pen[2]; //定义画笔对象
+	CBrush brush[2]; //定义笔刷对象
+	pen[0].CreatePen(PS_DASHDOT, 1, RGB(0, 0, 255)); //创建初始化画笔
+	brush[0].CreateStockObject(NULL_BRUSH); //初始化实心的空画刷（没有背景颜色）
+	dc.SelectObject(&brush[0]); //将画刷选入dc
+	dc.SelectObject(&pen[0]);  //将画笔选入dc
+	dc.SetBkMode(TRANSPARENT); //设置背景模式为透明，也可以使用SetBkColor设置背景色
+	dc.Rectangle(10, 342,200, 466); //创建一个透明的文本框
+	//pen[0].DeleteObject(); //释放dc
+	//brush[0].DeleteObject();  //注释掉这个为什么也可以？难道用完就释放了
+
+	pen[1].CreatePen(PS_DASHDOT, 1, RGB(0, 0, 255)); //创建初始化画笔
+	brush[1].CreateStockObject(NULL_BRUSH); //初始化实心的空画刷（没有背景颜色）
+	dc.SelectObject(&brush[1]); //将画刷选入dc
+	dc.SelectObject(&pen[1]);  //将画笔选入dc
+	dc.SetBkMode(TRANSPARENT); //设置背景模式为透明，也可以使用SetBkColor设置背景色
+	dc.Rectangle(10, 58, 200, 330); //创建一个透明的文本框
+	
+	
 }
 
 //当用户拖动最小化窗口时系统调用此函数取得光标
@@ -775,6 +808,17 @@ void CmenuDlg::OnBootsystem()
 	ResponseSend_T = 0;
 	WaitCarrier_T = 0;
 
+	RNMD_R = 0;
+	LNMD_R = 0;
+	Start_Hail_R = 0;
+	Hailresponse_R = 0;
+	ReceiveOver_R = 0;
+	LNMD2_R = 0;
+	RNMD2_R = 0;
+	CarrierSend_R = 0;
+	ResponseSend_R = 0;
+	WaitCarrier_R = 0;
+
 	messagestate = 0;					//有无数据发送
 	commondstate = 0;					//有无指令发送
 	missnumber = 0;						//丢失帧数初始化
@@ -933,7 +977,7 @@ void CmenuDlg::OnBnClickedDisconnectButton()
 
 }
 /********************发送消息***************************/
-void CmenuDlg::SendMessage(int *P_SE, int fLen)
+void CmenuDlg::SendMessagepro(int *P_SE, int fLen)
 {
 	m_ClientSocket.Send(P_SE, (fLen+1)*4 );  //发信息，Send发送字节长度，int型为四个字节
 
@@ -978,4 +1022,18 @@ void CmenuDlg::OnParaset()
 		m_duplex.ShowWindow(false);
 	if (banshuanggong)
 		m_halfduplexdlg.ShowWindow(false);
+}
+
+
+void CmenuDlg::OnLogout()
+{
+	// TODO: Add your command handler code here
+	CDialogEx::OnOK();
+}
+
+
+void CmenuDlg::OnBnClickedCleanupButton()
+{
+	// TODO: Add your control notification handler code here
+	SetDlgItemText(IDC_HIST_EDIT, _T(" "));
 }

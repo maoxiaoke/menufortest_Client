@@ -504,7 +504,7 @@ void ThreadFuncH(LPVOID lpParam)
 
 			CommondGroup = SPDU_framing();
 			encodecommond(CommondGroup);
-			((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessage(P_Data_CC, Len_DataInProcess);
+			((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessagepro(P_Data_CC, Len_DataInProcess);
 
 			HallCommond = 0;
 			Start_Hail_T = 0;
@@ -607,7 +607,7 @@ void ThreadFuncH(LPVOID lpParam)
 
 			CommondGroup = SPDU_framing();
 			encodecommond(CommondGroup);
-			((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessage(P_Data_CC, Len_DataInProcess);
+			((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessagepro(P_Data_CC, Len_DataInProcess);
 
 			HallCommond = 0;
 			CarrierSend_T = 0;
@@ -678,7 +678,7 @@ void ThreadFuncH(LPVOID lpParam)
 
 			CommondGroup = SPDU_framing();
 			encodecommond(CommondGroup);
-			((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessage(P_Data_CC, Len_DataInProcess);
+			((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessagepro(P_Data_CC, Len_DataInProcess);
 
 			HallCommond = 0;
 			ResponseSend_T = 0;
@@ -870,7 +870,7 @@ void CHalfDuplexDlg::banshuanggongsend()
 			encode(buffer);
 
 
-			((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessage(P_Data_CC, Len_DataInProcess);
+			((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessagepro(P_Data_CC, Len_DataInProcess);
 			arqarray(num_frame);					//将数据存入数组，以发送arq
 			break;
 		}
@@ -978,7 +978,7 @@ void CHalfDuplexDlg::banshuanggongsend()
 				encode(buffer);
 
 				//				Sleep(4000);
-				((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessage(P_Data_CC, Len_DataInProcess);
+				((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessagepro(P_Data_CC, Len_DataInProcess);
 				arqarray(num_frame);					//将数据存入数组，以发送arq
 				break;
 			}

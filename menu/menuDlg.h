@@ -92,7 +92,7 @@ public:
 	CEdit m_ServerPort;
 	CButton m_ConnectButton;
 
-	void SendMessage(int *P_SE, int fLen); //发送消息
+	void SendMessagepro(int *P_SE, int fLen); //发送消息
 
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 
@@ -100,4 +100,7 @@ public:
 	afx_msg void OnStatusdisplay();
 	afx_msg void OnParaset();
 	CFont font;
+	afx_msg void OnLogout();
+//	afx_msg void OnBnClickedOk();
+	afx_msg void OnBnClickedCleanupButton();
 };

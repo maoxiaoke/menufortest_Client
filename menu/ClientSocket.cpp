@@ -136,7 +136,7 @@ void CClientSocket::OnReceive(int nErrorCode)
 						commondstate = 1;
 						ArqGroup = PLCW_framing(NeedSerialNumber);
 						encodearq(ArqGroup);
-						((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessage(P_Data_CC, Len_DataInProcess);
+						((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessagepro(P_Data_CC, Len_DataInProcess);
 						break;
 					}
 				}
@@ -163,7 +163,7 @@ void CClientSocket::OnReceive(int nErrorCode)
 						commondstate = 1;
 						ArqGroup = PLCW_framing(NeedSerialNumber);
 						encodearq(ArqGroup);
-						((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessage(P_Data_CC, Len_DataInProcess);
+						((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessagepro(P_Data_CC, Len_DataInProcess);
 						break;
 					}
 				}
@@ -190,7 +190,7 @@ void CClientSocket::OnReceive(int nErrorCode)
 						commondstate = 1;
 						ArqGroup = PLCW_framing(NeedSerialNumber);
 						encodearq(ArqGroup);
-						((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessage(P_Data_CC, Len_DataInProcess);
+						((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessagepro(P_Data_CC, Len_DataInProcess);
 						break;
 					}
 				}

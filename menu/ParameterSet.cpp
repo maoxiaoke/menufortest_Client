@@ -258,7 +258,7 @@ void CParameterSet::OnPaint()
 	//	dc.SetBkMode(TRANSPARENT);
 	dc.SetBkMode(TRANSPARENT); //设置背景模式为透明，也可以使用SetBkColor设置背景色
 	//DrawRect(&dc);
-	dc.Rectangle(15, 120, 500, 270); //创建一个透明的文本框
+	dc.Rectangle(10, 120, 500, 270); //创建一个透明的文本框
 
 	//pen[1].DeleteObject();
 	//brush[1].DeleteObject();

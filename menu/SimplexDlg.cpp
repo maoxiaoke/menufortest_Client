@@ -217,7 +217,7 @@ void ThreadFuncS(LPVOID lpParam)
 
 			CommondGroup = SPDU_framing();
 			encodecommond(CommondGroup);
-			((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessage(P_Data_CC, Len_DataInProcess);
+			((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessagepro(P_Data_CC, Len_DataInProcess);
 
 			HallCommond = 0;
 			CarrierSend_T = 0;
@@ -267,7 +267,7 @@ void ThreadFuncS(LPVOID lpParam)
 
 			CommondGroup = SPDU_framing();
 			encodecommond(CommondGroup);
-			((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessage(P_Data_CC, Len_DataInProcess);
+			((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessagepro(P_Data_CC, Len_DataInProcess);
 
 			SetControlParameters = 0;
 			RNMD_T = 0;
@@ -490,7 +490,7 @@ void CSimplexDlg::dangongsend()
 			encode(buffer);
 
 
-			((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessage(P_Data_CC, Len_DataInProcess);
+			((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessagepro(P_Data_CC, Len_DataInProcess);
 			arqarray(num_frame);					//将数据存入数组，以发送arq
 			break;
 		}
@@ -598,7 +598,7 @@ void CSimplexDlg::dangongsend()
 				encode(buffer);
 
 				//				Sleep(4000);
-				((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessage(P_Data_CC, Len_DataInProcess);
+				((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessagepro(P_Data_CC, Len_DataInProcess);
 				arqarray(num_frame);					//将数据存入数组，以发送arq
 				break;
 			}

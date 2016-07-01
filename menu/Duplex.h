@@ -48,6 +48,7 @@ public:
 
 	HBITMAP m_grey;  // Ìí¼Ó¾ä±ú±äÁ¿
 	HBITMAP m_red;
+	CFont font;
 
 	
 
