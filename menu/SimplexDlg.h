@@ -4,7 +4,6 @@
 #include "ParameterSet.h"
 #include "StatusDisplayDlg.h"
 void ThreadFuncS(LPVOID lpParam); //类外声明线程函数
-void SystemTimeS(); //获取系统时间
 // CSimplexDlg 对话框
 
 class CSimplexDlg : public CDialogEx
@@ -34,9 +33,15 @@ public:
 	CStatic m_led8;
 	CStatic m_led9;
 
-	int SetLedOffS(int a);
+	int SetLedOff(int a);
 	int StartRunSimplex(int a);
 	void dangongsend();
+
+	void SystemTime(); //获取系统时间
+	UINT oldtickcount, newtickcount;
+	HBITMAP m_grey;  // 添加句柄变量
+	HBITMAP m_red;
+	CFont font;
 
 	CParameterSet *psSDlg;
 	CStatusDisplayDlg * d_sdSDlg;  //半双工状态下访问StatusDisplay对话框  d = duplex
@@ -47,4 +52,25 @@ protected:
 	HANDLE hThread; //线程句柄
 	DWORD ThreadID; //线程ID
 
+public:
+
+	//单工状态下的系统参数设置
+	int state_inactiveS;
+	int state_starthailS;
+	int state_hailacquisitionS;
+	int state_haildirectivesS;
+	int state_hailtailS;
+	int state_hailresponseS;
+	int state_carrieronlyS;
+	int state_acquisitionS;
+	int state_simplexsonS;
+	int state_lnmdendS;
+	int state_simplexsendS;
+	int state_terminatingtailS;
+
+	int StopFlagS;
+
+
+
+	virtual BOOL OnInitDialog();
 };

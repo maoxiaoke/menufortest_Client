@@ -122,7 +122,7 @@ void ThreadFunc(LPVOID lpParam)
 			pDlg->SystemTime();
 				
 			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
-			ppDlg->m_Hist.ReplaceSel(_T("开始载波同步\r\n"));
+			ppDlg->m_Hist.ReplaceSel(_T("开始握手\r\n"));
 			pDlg->m_led3.SetBitmap(pDlg->m_red);
 			Sleep(1000);
 

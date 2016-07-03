@@ -106,18 +106,15 @@
   <ItemGroup>
     <ClInclude Include="ClientSocket.h" />
     <ClInclude Include="Duplex.h" />
-    <ClInclude Include="DuplexFunction.h" />
     <ClInclude Include="encode.h" />
     <ClInclude Include="FileViewDlg.h" />
     <ClInclude Include="Framing.h" />
     <ClInclude Include="HalfDuplexDlg.h" />
-    <ClInclude Include="HalfDuplexFunction.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="menuDlg.h" />
     <ClInclude Include="ParameterSet.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SimplexDlg.h" />
-    <ClInclude Include="SimplexFunction.h" />
     <ClInclude Include="StatusDisplayDlg.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="SystemParameter.h" />

@@ -5,7 +5,7 @@
 #include "menu.h"
 #include "HalfDuplexDlg.h"
 #include "afxdialogex.h"
-#include "HalfDuplexFunction.h"
+//#include "HalfDuplexFunction.h"
 #include "menuDlg.h"
 #include "TransRevShare.h"
 #include "SystemParameter.h"
@@ -53,7 +53,7 @@ void CHalfDuplexDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CHalfDuplexDlg, CDialogEx)
 	ON_WM_PAINT()
-	ON_BN_CLICKED(IDOK, &CHalfDuplexDlg::OnBnClickedOk)
+	//ON_BN_CLICKED(IDOK, &CHalfDuplexDlg::OnBnClickedOk)
 END_MESSAGE_MAP()
 
 
@@ -73,7 +73,7 @@ void CHalfDuplexDlg::OnPaint()
 	dc.SelectObject(&brush); //将画刷选入dc
 	dc.SelectObject(&pen);  //将画笔选入dc
 	dc.SetBkMode(TRANSPARENT); //设置背景模式为透明，也可以使用SetBkColor设置背景色
-	dc.Rectangle(15, 30, 500, 420); //创建一个透明的文本框
+	dc.Rectangle(15, 20, 500, 430); //创建一个透明的文本框
 }
 
 
@@ -83,9 +83,28 @@ BOOL CHalfDuplexDlg::OnInitDialog()
 
 	// TODO:  在此添加额外的初始化
 
-
-	//
-	
+	m_grey = LoadBitmap(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDB_BITMAP_GREY));
+	m_red = LoadBitmap(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDB_BITMAP_RED));
+	//AfxGetInstanceHandle():This function allows you to retrieve (取回) the instance handle of the current application.
+	//MAKEINTRESOURCE macro (宏):Converts an integer value to a resource type compatible with the resource-management functions. This macro is used in place of a string containing the name of the resource.
+	/*********初始led灯为灰色**********/
+	m_led1.SetBitmap(m_grey);
+	m_led2.SetBitmap(m_grey);
+	m_led3.SetBitmap(m_grey);
+	m_led4.SetBitmap(m_grey);
+	m_led5.SetBitmap(m_grey);
+	m_led6.SetBitmap(m_grey);
+	m_led7.SetBitmap(m_grey);
+	m_led8.SetBitmap(m_grey);
+	m_led9.SetBitmap(m_grey);
+	m_led10.SetBitmap(m_grey);
+	m_led11.SetBitmap(m_grey);
+	m_led12.SetBitmap(m_grey);
+	m_led13.SetBitmap(m_grey);
+	m_led14.SetBitmap(m_grey);
+	m_led15.SetBitmap(m_grey);
+	m_led16.SetBitmap(m_grey);
+	m_led17.SetBitmap(m_grey);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常:  OCX 属性页应返回 FALSE
@@ -117,6 +136,11 @@ int CHalfDuplexDlg::StartRunHalfDuplex(int a)
 
 	StopFlagH = 0;
 
+	SetLedOff(1);
+	Sleep(1000);
+	state_inactiveH = 1;   //初始状态
+	m_led1.SetBitmap(m_red);
+
 	hThread = CreateThread(NULL,
 		0,
 		(LPTHREAD_START_ROUTINE)ThreadFuncH,
@@ -127,586 +151,451 @@ int CHalfDuplexDlg::StartRunHalfDuplex(int a)
 	return 0; //定义的是有返回值的函数，所以需要return 0
 }
 
-void CHalfDuplexDlg::OnBnClickedOk()
+int CHalfDuplexDlg::SetLedOff(int a)
 {
-	// TODO:  在此添加控件通知处理程序代码
-
-
-	hThread = CreateThread(NULL,
-		0,
-		(LPTHREAD_START_ROUTINE)ThreadFuncH,
-		this,
-		0,
-		&ThreadID);
-	/*
-	state_inactiveH = 0; //初始状态
-	state_waithailH = 0;  //等待握手
-	state_starthailH = 0; //开始载波同步
-	state_hailacquisitionH = 0; // 开始符号同步
-	state_haildirectivesH = 0; //发送握手指令
-	state_hailtailH = 0;  //发送握手指令
-	state_hailresponseH = 0;  //等待握手响应
-	state_carrieronlyH = 0; //信道载波维持
-	state_acquisitionH = 0;  //发送捕获序列
-	state_receiveDataH = 0;  //接收数据
-	state_waitfirstframeH = 0; //等待第一帧
-	state_waitcarrierH = 0; // 等待载波
-	state_tailswitchH = 0; //尾序列转换
-	state_tokenexchangeH = 0; //状态转换
-	state_senddataH = 0; //发送数据
-	state_responseendH = 0;
-	state_tailquitH = 0; //结束尾序列
-
-	StopFlagH = 0;
-
-	// SetLedOffH(1);
-	//	Sleep(1000);
-	while (StopFlagH == 0)
-	{
-		if (StopFlagH == 1)
-		{
-			SetLedOffH(1);
-			break;
-		}
-		while (1)
-		{
-			Sleep(1000);
-			state_inactiveH = 1;
-			CBitmap bitmap;
-			HBITMAP hBmp;
-			bitmap.LoadBitmap(IDB_BITMAP_RED);
-			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-			m_led1.SetBitmap(hBmp);
-			if (state_inactiveH == 1) break;
-		}
-		if (StopFlagH == 1)
-		{
-			SetLedOffH(1);
-			break;
-		}
-		while (1)
-		{
-			Sleep(1000);
-			state_waithailH = 1;
-			CBitmap bitmap;
-			HBITMAP hBmp;
-			bitmap.LoadBitmap(IDB_BITMAP_RED);
-			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-			m_led2.SetBitmap(hBmp);
-			if (state_waithailH == 1) break;
-		}
-		if (StopFlagH == 1)
-		{
-			SetLedOffH(1);
-			break;
-		}
-		while (1)
-		{
-			Sleep(1000);
-			state_starthailH = 1;
-			CBitmap bitmap;
-			HBITMAP hBmp;
-			bitmap.LoadBitmap(IDB_BITMAP_RED);
-			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-			m_led14.SetBitmap(hBmp);
-			if (state_starthailH == 1) break;
-		}
-		if (StopFlagH == 1)
-		{
-			SetLedOffH(1);
-			break;
-		}
-		while (1)
-		{
-			Sleep(1000);
-			state_hailacquisitionH = 1;
-			CBitmap bitmap;
-			HBITMAP hBmp;
-			bitmap.LoadBitmap(IDB_BITMAP_RED);
-			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-			m_led15.SetBitmap(hBmp);
-			if (state_hailacquisitionH == 1) break;
-		}
-		if (StopFlagH == 1)
-		{
-			SetLedOffH(1);
-			break;
-		}
-		while (1)
-		{
-			Sleep(1000);
-			state_haildirectivesH = 1;
-			CBitmap bitmap;
-			HBITMAP hBmp;
-			bitmap.LoadBitmap(IDB_BITMAP_RED);
-			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-			m_led16.SetBitmap(hBmp);
-			if (state_haildirectivesH == 1) break;
-		}
-		if (StopFlagH == 1)
-		{
-			SetLedOffH(1);
-			break;
-		}
-		while (1)
-		{
-			Sleep(1000);
-			state_hailtailH = 1;
-			CBitmap bitmap;
-			HBITMAP hBmp;
-			bitmap.LoadBitmap(IDB_BITMAP_RED);
-			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-			m_led17.SetBitmap(hBmp);
-			if (state_hailtailH == 1) break;
-		}
-		if (StopFlagH == 1)
-		{
-			SetLedOffH(1);
-			break;
-		}
-		while (1)
-		{
-			Sleep(1000);
-			state_hailresponseH = 1;
-			CBitmap bitmap;
-			HBITMAP hBmp;
-			bitmap.LoadBitmap(IDB_BITMAP_RED);
-			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-			m_led3.SetBitmap(hBmp);
-			if (state_hailresponseH == 1) break;
-		}
-		if (StopFlagH == 1)
-		{
-			SetLedOffH(1);
-			break;
-		}
-		while (1)
-		{
-			Sleep(1000);
-			state_receiveDataH = 1;
-			CBitmap bitmap;
-			HBITMAP hBmp;
-			bitmap.LoadBitmap(IDB_BITMAP_RED);
-			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-			m_led6.SetBitmap(hBmp);
-			if (state_receiveDataH == 1) break;
-		}
-		if (StopFlagH == 1)
-		{
-			SetLedOffH(1);
-			break;
-		}
-		while (1)
-		{
-			Sleep(1000);
-			state_waitcarrierH = 1;
-			CBitmap bitmap;
-			HBITMAP hBmp;
-			bitmap.LoadBitmap(IDB_BITMAP_RED);
-			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-			m_led7.SetBitmap(hBmp);
-			if (state_waitcarrierH == 1) break;
-		}
-		if (StopFlagH == 1)
-		{
-			SetLedOffH(1);
-			break;
-		}
-		while (1)
-		{
-			Sleep(1000);
-			state_acquisitionH = 1;
-			CBitmap bitmap;
-			HBITMAP hBmp;
-			bitmap.LoadBitmap(IDB_BITMAP_RED);
-			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-			m_led8.SetBitmap(hBmp);
-			if (state_acquisitionH == 1) break;
-		}
-		
-		if (StopFlagH == 1)
-		{
-			SetLedOffH(1);
-			break;
-		}
-		while (1)
-		{
-			Sleep(1000);
-			state_senddataH = 1;
-			CBitmap bitmap;
-			HBITMAP hBmp;
-			bitmap.LoadBitmap(IDB_BITMAP_RED);
-			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-			m_led9.SetBitmap(hBmp);
-			if (state_senddataH == 1) break;
-		}
-		if (StopFlagH == 1)
-		{
-			SetLedOffH(1);
-			break;
-		}
-		while (1)
-		{
-			Sleep(1000);
-			state_responseendH = 1;
-			CBitmap bitmap;
-			HBITMAP hBmp;
-			bitmap.LoadBitmap(IDB_BITMAP_RED);
-			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-			m_led10.SetBitmap(hBmp);
-			if (state_responseendH == 1) break;
-		}
-		if (StopFlagH == 1)
-		{
-			SetLedOffH(1);
-			break;
-		}
-		while (1)
-		{
-			Sleep(1000);
-			state_tailquitH = 1;
-			CBitmap bitmap;
-			HBITMAP hBmp;
-			bitmap.LoadBitmap(IDB_BITMAP_RED);
-			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-			m_led11.SetBitmap(hBmp);
-			if (state_tailquitH == 1) break;
-		}
-		break;
-	}
-	*/
-//	CDialogEx::OnOK();
-}
-
-int CHalfDuplexDlg::SetLedOffH(int a)
-{
-
-	CBitmap bitmap;
-	HBITMAP hBmp;
-	bitmap.LoadBitmap(IDB_BITMAP_GREY);
-	hBmp = (HBITMAP)bitmap.GetSafeHandle();
-	m_led1.SetBitmap(hBmp);
-	m_led2.SetBitmap(hBmp);
-	m_led3.SetBitmap(hBmp);
-	m_led4.SetBitmap(hBmp);
-	m_led5.SetBitmap(hBmp);
-	m_led6.SetBitmap(hBmp);
-	m_led7.SetBitmap(hBmp);
-	m_led8.SetBitmap(hBmp);
-	m_led9.SetBitmap(hBmp);
-	m_led10.SetBitmap(hBmp);
-	m_led11.SetBitmap(hBmp);
-	m_led12.SetBitmap(hBmp);
-	m_led13.SetBitmap(hBmp);
-	m_led14.SetBitmap(hBmp);
-	m_led15.SetBitmap(hBmp);
-	m_led16.SetBitmap(hBmp);
-	m_led17.SetBitmap(hBmp);
+	m_led1.SetBitmap(m_grey);
+	m_led2.SetBitmap(m_grey);
+	m_led3.SetBitmap(m_grey);
+	m_led4.SetBitmap(m_grey);
+	m_led5.SetBitmap(m_grey);
+	m_led6.SetBitmap(m_grey);
+	m_led7.SetBitmap(m_grey);
+	m_led8.SetBitmap(m_grey);
+	m_led9.SetBitmap(m_grey);
+	m_led10.SetBitmap(m_grey);
+	m_led11.SetBitmap(m_grey);
+	m_led12.SetBitmap(m_grey);
+	m_led13.SetBitmap(m_grey);
+	m_led14.SetBitmap(m_grey);
+	m_led15.SetBitmap(m_grey);
+	m_led16.SetBitmap(m_grey);
+	m_led17.SetBitmap(m_grey);
 	return 0;
 }
 
 void ThreadFuncH(LPVOID lpParam)
 {
 	CHalfDuplexDlg *pDlg = (CHalfDuplexDlg*)lpParam;
+	CmenuDlg *ppDlg = (CmenuDlg*)AfxGetApp()->m_pMainWnd;
 
-	while (StopFlagH == 0)
+	pDlg->HalfDuplexState = 11;  //get into the state-11 at the first start
+	while (1)
 	{
-		if (StopFlagH == 1)
+		switch (pDlg->HalfDuplexState)
 		{
-			pDlg->SetLedOffH(1);
-			break;
-		}
-		while (1)
-		{
-			Sleep(1000);
-			state_inactiveH = 1;
-			CBitmap bitmap;
-			HBITMAP hBmp;
-			bitmap.LoadBitmap(IDB_BITMAP_RED);
-			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-			pDlg->m_led1.SetBitmap(hBmp);
-			if (state_inactiveH == 1) break;
-		}
-		if (StopFlagH == 1)
-		{
-			pDlg->SetLedOffH(1);
-			break;
-		}
-		while (1)
-		{
-			Sleep(1000);
-			state_starthailH = 1;
-			CBitmap bitmap;
-			HBITMAP hBmp;
-			bitmap.LoadBitmap(IDB_BITMAP_RED);
-			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-			pDlg->m_led14.SetBitmap(hBmp);
+		case 11:
+			pDlg->state_starthailH = 1;
 
-			SystemTimeH();  //调用获取系统时间函数
-
-			CmenuDlg *ppDlg = (CmenuDlg*)AfxGetApp()->m_pMainWnd;
+			pDlg->SystemTime();
 			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
-			ppDlg->m_Hist.ReplaceSel(_T("开始握手\r\n"));
-
-			if (state_starthailH == 1) break;
-		}
-		if (StopFlagH == 1)
-		{
-			pDlg->SetLedOffH(1);
-			break;
-		}
-		while (1)
-		{
+			ppDlg->m_Hist.ReplaceSel(_T("Start Hail Action.\r\n"));
+			pDlg->m_led14.SetBitmap(pDlg->m_red);
+			
 			Sleep(1000);
-			state_hailacquisitionH = 1;
-			CBitmap bitmap;
-			HBITMAP hBmp;
-			bitmap.LoadBitmap(IDB_BITMAP_RED);
-			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-			pDlg->m_led15.SetBitmap(hBmp);
-			if (state_hailacquisitionH == 1) break;
-		}
-		if (StopFlagH == 1)
-		{
-			pDlg->SetLedOffH(1);
+			pDlg->HalfDuplexState = 12;
 			break;
-		}
-		while (1)
-		{
-			Sleep(1000);
-			state_haildirectivesH = 1;
-			CBitmap bitmap;
-			HBITMAP hBmp;
-			bitmap.LoadBitmap(IDB_BITMAP_RED);
-			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-			pDlg->m_led16.SetBitmap(hBmp);
+		case 12:
+			pDlg->state_hailacquisitionH = 1;
 
-			if (state_haildirectivesH == 1) break;
-		}
-		if (StopFlagH == 1)
-		{
-			pDlg->SetLedOffH(1);
+			pDlg->SystemTime();
+			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
+			ppDlg->m_Hist.ReplaceSel(_T("Send Hail Acquistion.\r\n"));
+			pDlg->m_led15.SetBitmap(pDlg->m_red);
+			
+			Sleep(400);
+			pDlg->HalfDuplexState = 13;
 			break;
-		}
-		while (1)
-		{
-			Sleep(1000);
-			state_hailtailH = 1;
-			CBitmap bitmap;
-			HBITMAP hBmp;
-			bitmap.LoadBitmap(IDB_BITMAP_RED);
-			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-			pDlg->m_led17.SetBitmap(hBmp);
 
-			//向被动方发送握手信号
+		case 13:
+			pDlg->state_haildirectivesH = 1;
+
+			pDlg->SystemTime();
+			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
+			ppDlg->m_Hist.ReplaceSel(_T("Send Hail Directives.\r\n"));
+			pDlg->m_led16.SetBitmap(pDlg->m_red);
+
+			//向响应方发送握手信号
 			HallCommond = 1;
 			Start_Hail_T = 1;
-
+			
 			CommondGroup = SPDU_framing();
 			encodecommond(CommondGroup);
 			((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessagepro(P_Data_CC, Len_DataInProcess);
-
+			
 			HallCommond = 0;
 			Start_Hail_T = 0;
 			//
 
-			if (state_hailtailH == 1) break;
-		}
-		if (StopFlagH == 1)
-		{
-			pDlg->SetLedOffH(1);
+			Sleep(500);
+			pDlg->HalfDuplexState = 14;
 			break;
-		}
-		while (1)
-		{
-			Sleep(1000);
-			state_hailresponseH = 1;
-			CBitmap bitmap;
-			HBITMAP hBmp;
-			bitmap.LoadBitmap(IDB_BITMAP_RED);
-			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-			pDlg->m_led3.SetBitmap(hBmp);
+		case 14:
+			pDlg->state_hailtailH = 1;
 
-			SystemTimeH();  //调用获取系统时间函数
-			CmenuDlg *ppDlg = (CmenuDlg*)AfxGetApp()->m_pMainWnd;
+			pDlg->SystemTime();
 			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
-			ppDlg->m_Hist.ReplaceSel(_T("等待握手响应\r\n"));
+			ppDlg->m_Hist.ReplaceSel(_T("Send Hail Tail.\r\n"));
+			pDlg->m_led17.SetBitmap(pDlg->m_red);
 
-			if (state_hailresponseH == 1) break;
-		}
-		if (StopFlagH == 1)
-		{
-			pDlg->SetLedOffH(1);
+			Sleep(50);
+			pDlg->HalfDuplexState = 36;
 			break;
-		}
+			
+		case 36:
+			pDlg->state_hailresponseH = 1;
 
-		while (1)
-		{
-			if (CarrierSend_R == 1)
-			{
-				CarrierSend_R = 0;
-				break;
-			}
-			if (StopFlagH == 1)
-			{
-				pDlg->SetLedOffH(1);
-				return;
-			}
-		}
-
-		while (1)
-		{
-			Sleep(1000);
-			state_receiveDataH = 1;
-			CBitmap bitmap;
-			HBITMAP hBmp;
-			bitmap.LoadBitmap(IDB_BITMAP_RED);
-			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-			pDlg->m_led6.SetBitmap(hBmp);
-
-			SystemTimeH();  //调用获取系统时间函数
-			CmenuDlg *ppDlg = (CmenuDlg*)AfxGetApp()->m_pMainWnd;
+			pDlg->SystemTime();
 			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
-			ppDlg->m_Hist.ReplaceSel(_T("接收数据\r\n"));
+			ppDlg->m_Hist.ReplaceSel(_T("Wait for Hail Response.\r\n"));
 
-			if (state_receiveDataH == 1) break;
-		}
-		if (StopFlagH == 1)
-		{
-			pDlg->SetLedOffH(1);
-			break;
-		}
-
-		while (1)
-		{
-			if (WaitCarrier_R == 1)
+			pDlg->oldTickCount = GetTickCount();
+			while (1)
 			{
-				WaitCarrier_R = 0;
-				break;
+				pDlg->newTickCount = GetTickCount();
+				if (CarrierSend_R)
+				{
+					CarrierSend_R = 0;
+					pDlg->m_led3.SetBitmap(pDlg->m_red);
+					
+					pDlg->HalfDuplexState = 60;
+					break;
+
+				}
+				if ((pDlg->newTickCount - pDlg->oldTickCount) >= 2000)
+				{
+					pDlg->state_starthailH = 0;
+					pDlg->state_hailacquisitionH = 0;
+					pDlg->state_haildirectivesH = 0;
+					pDlg->state_hailtailH = 0;
+					pDlg->state_hailresponseH = 0;
+					
+					pDlg->m_led14.SetBitmap(pDlg->m_grey);
+					pDlg->m_led15.SetBitmap(pDlg->m_grey);
+					pDlg->m_led16.SetBitmap(pDlg->m_grey);
+					pDlg->m_led17.SetBitmap(pDlg->m_grey);
+					pDlg->m_led3.SetBitmap(pDlg->m_grey);
+
+					break;
+				}
 			}
-			if (StopFlagH == 1)
-			{
-				pDlg->SetLedOffH(1);
-				return;
-			}
-		}
-
-		while (1)
-		{
-			Sleep(1000);
-			state_waitcarrierH = 1;
-			CBitmap bitmap;
-			HBITMAP hBmp;
-			bitmap.LoadBitmap(IDB_BITMAP_RED);
-			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-			pDlg->m_led7.SetBitmap(hBmp);
-
-			//向被动方发送握手信号
-			HallCommond = 1;
-			CarrierSend_T = 1;
-
-			CommondGroup = SPDU_framing();
-			encodecommond(CommondGroup);
-			((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessagepro(P_Data_CC, Len_DataInProcess);
-
-			HallCommond = 0;
-			CarrierSend_T = 0;
-			//
-
-			if (state_waitcarrierH == 1) break;
-		}
-		if (StopFlagH == 1)
-		{
-			pDlg->SetLedOffH(1);
 			break;
-		}
-		while (1)
-		{
-			Sleep(1000);
-			state_acquisitionH = 1;
-			CBitmap bitmap;
-			HBITMAP hBmp;
-			bitmap.LoadBitmap(IDB_BITMAP_RED);
-			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-			pDlg->m_led8.SetBitmap(hBmp);
-			if (state_acquisitionH == 1) break;
-		}
+		case 60:
+			pDlg->state_receiveDataH = 1;
 
-		if (StopFlagH == 1)
-		{
-			pDlg->SetLedOffH(1);
-			break;
-		}
-		while (1)
-		{
-			Sleep(1000);
-			SystemTimeH();  //调用获取系统时间函数
-			CmenuDlg *ppDlg = (CmenuDlg*)AfxGetApp()->m_pMainWnd;
+			pDlg->SystemTime();
 			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
-			ppDlg->m_Hist.ReplaceSel(_T("发送数据\r\n"));
-			pDlg->banshuanggongsend();
-
-			state_senddataH = 1;
-			CBitmap bitmap;
-			HBITMAP hBmp;
-			bitmap.LoadBitmap(IDB_BITMAP_RED);
-			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-			pDlg->m_led9.SetBitmap(hBmp);
+			ppDlg->m_Hist.ReplaceSel(_T("Data Services Receive.\r\n"));
 
 
 
-			if (state_senddataH == 1) break;
-		}
-		if (StopFlagH == 1)
-		{
-			pDlg->SetLedOffH(1);
+		default:
 			break;
 		}
-		while (1)
-		{
-			Sleep(1000);
-			state_responseendH = 1;
-			CBitmap bitmap;
-			HBITMAP hBmp;
-			bitmap.LoadBitmap(IDB_BITMAP_RED);
-			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-			pDlg->m_led10.SetBitmap(hBmp);
-
-			//发送终止应答信号
-			HallCommond = 1;
-			ResponseSend_T = 1;
-
-			CommondGroup = SPDU_framing();
-			encodecommond(CommondGroup);
-			((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessagepro(P_Data_CC, Len_DataInProcess);
-
-			HallCommond = 0;
-			ResponseSend_T = 0;
-			//
-
-			if (state_responseendH == 1) break;
-		}
-		if (StopFlagH == 1)
-		{
-			pDlg->SetLedOffH(1);
-			break;
-		}
-		while (1)
-		{
-			Sleep(1000);
-			state_tailquitH = 1;
-			CBitmap bitmap;
-			HBITMAP hBmp;
-			bitmap.LoadBitmap(IDB_BITMAP_RED);
-			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-			pDlg->m_led11.SetBitmap(hBmp);
-			if (state_tailquitH == 1) break;
-		}
-		Sleep(2000);
-		pDlg->SetLedOffH(1); //将LED灯置黑
-		break;
 	}
 }
+
+//void ThreadFuncH(LPVOID lpParam)
+//{
+//	CHalfDuplexDlg *pDlg = (CHalfDuplexDlg*)lpParam;
+//
+//	while (StopFlagH == 0)
+//	{
+//		if (StopFlagH == 1)
+//		{
+//			pDlg->SetLedOffH(1);
+//			break;
+//		}
+//		while (1)
+//		{
+//			Sleep(1000);
+//			state_inactiveH = 1;
+//			CBitmap bitmap;
+//			HBITMAP hBmp;
+//			bitmap.LoadBitmap(IDB_BITMAP_RED);
+//			hBmp = (HBITMAP)bitmap.GetSafeHandle();
+//			pDlg->m_led1.SetBitmap(hBmp);
+//			if (state_inactiveH == 1) break;
+//		}
+//		if (StopFlagH == 1)
+//		{
+//			pDlg->SetLedOffH(1);
+//			break;
+//		}
+//		while (1)
+//		{
+//			Sleep(1000);
+//			state_starthailH = 1;
+//			CBitmap bitmap;
+//			HBITMAP hBmp;
+//			bitmap.LoadBitmap(IDB_BITMAP_RED);
+//			hBmp = (HBITMAP)bitmap.GetSafeHandle();
+//			pDlg->m_led14.SetBitmap(hBmp);
+//
+//			SystemTimeH();  //调用获取系统时间函数
+//
+//			CmenuDlg *ppDlg = (CmenuDlg*)AfxGetApp()->m_pMainWnd;
+//			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
+//			ppDlg->m_Hist.ReplaceSel(_T("开始握手\r\n"));
+//
+//			if (state_starthailH == 1) break;
+//		}
+//		if (StopFlagH == 1)
+//		{
+//			pDlg->SetLedOffH(1);
+//			break;
+//		}
+//		while (1)
+//		{
+//			Sleep(1000);
+//			state_hailacquisitionH = 1;
+//			CBitmap bitmap;
+//			HBITMAP hBmp;
+//			bitmap.LoadBitmap(IDB_BITMAP_RED);
+//			hBmp = (HBITMAP)bitmap.GetSafeHandle();
+//			pDlg->m_led15.SetBitmap(hBmp);
+//			if (state_hailacquisitionH == 1) break;
+//		}
+//		if (StopFlagH == 1)
+//		{
+//			pDlg->SetLedOffH(1);
+//			break;
+//		}
+//		while (1)
+//		{
+//			Sleep(1000);
+//			state_haildirectivesH = 1;
+//			CBitmap bitmap;
+//			HBITMAP hBmp;
+//			bitmap.LoadBitmap(IDB_BITMAP_RED);
+//			hBmp = (HBITMAP)bitmap.GetSafeHandle();
+//			pDlg->m_led16.SetBitmap(hBmp);
+//
+//			if (state_haildirectivesH == 1) break;
+//		}
+//		if (StopFlagH == 1)
+//		{
+//			pDlg->SetLedOffH(1);
+//			break;
+//		}
+//		while (1)
+//		{
+//			Sleep(1000);
+//			state_hailtailH = 1;
+//			CBitmap bitmap;
+//			HBITMAP hBmp;
+//			bitmap.LoadBitmap(IDB_BITMAP_RED);
+//			hBmp = (HBITMAP)bitmap.GetSafeHandle();
+//			pDlg->m_led17.SetBitmap(hBmp);
+//
+//			//向被动方发送握手信号
+//			HallCommond = 1;
+//			Start_Hail_T = 1;
+//
+//			CommondGroup = SPDU_framing();
+//			encodecommond(CommondGroup);
+//			((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessagepro(P_Data_CC, Len_DataInProcess);
+//
+//			HallCommond = 0;
+//			Start_Hail_T = 0;
+//			//
+//
+//			if (state_hailtailH == 1) break;
+//		}
+//		if (StopFlagH == 1)
+//		{
+//			pDlg->SetLedOffH(1);
+//			break;
+//		}
+//		while (1)
+//		{
+//			Sleep(1000);
+//			state_hailresponseH = 1;
+//			CBitmap bitmap;
+//			HBITMAP hBmp;
+//			bitmap.LoadBitmap(IDB_BITMAP_RED);
+//			hBmp = (HBITMAP)bitmap.GetSafeHandle();
+//			pDlg->m_led3.SetBitmap(hBmp);
+//
+//			SystemTimeH();  //调用获取系统时间函数
+//			CmenuDlg *ppDlg = (CmenuDlg*)AfxGetApp()->m_pMainWnd;
+//			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
+//			ppDlg->m_Hist.ReplaceSel(_T("等待握手响应\r\n"));
+//
+//			if (state_hailresponseH == 1) break;
+//		}
+//		if (StopFlagH == 1)
+//		{
+//			pDlg->SetLedOffH(1);
+//			break;
+//		}
+//
+//		while (1)
+//		{
+//			if (CarrierSend_R == 1)
+//			{
+//				CarrierSend_R = 0;
+//				break;
+//			}
+//			if (StopFlagH == 1)
+//			{
+//				pDlg->SetLedOffH(1);
+//				return;
+//			}
+//		}
+//
+//		while (1)
+//		{
+//			Sleep(1000);
+//			state_receiveDataH = 1;
+//			CBitmap bitmap;
+//			HBITMAP hBmp;
+//			bitmap.LoadBitmap(IDB_BITMAP_RED);
+//			hBmp = (HBITMAP)bitmap.GetSafeHandle();
+//			pDlg->m_led6.SetBitmap(hBmp);
+//
+//			SystemTimeH();  //调用获取系统时间函数
+//			CmenuDlg *ppDlg = (CmenuDlg*)AfxGetApp()->m_pMainWnd;
+//			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
+//			ppDlg->m_Hist.ReplaceSel(_T("接收数据\r\n"));
+//
+//			if (state_receiveDataH == 1) break;
+//		}
+//		if (StopFlagH == 1)
+//		{
+//			pDlg->SetLedOffH(1);
+//			break;
+//		}
+//
+//		while (1)
+//		{
+//			if (WaitCarrier_R == 1)
+//			{
+//				WaitCarrier_R = 0;
+//				break;
+//			}
+//			if (StopFlagH == 1)
+//			{
+//				pDlg->SetLedOffH(1);
+//				return;
+//			}
+//		}
+//
+//		while (1)
+//		{
+//			Sleep(1000);
+//			state_waitcarrierH = 1;
+//			CBitmap bitmap;
+//			HBITMAP hBmp;
+//			bitmap.LoadBitmap(IDB_BITMAP_RED);
+//			hBmp = (HBITMAP)bitmap.GetSafeHandle();
+//			pDlg->m_led7.SetBitmap(hBmp);
+//
+//			//向被动方发送握手信号
+//			HallCommond = 1;
+//			CarrierSend_T = 1;
+//
+//			CommondGroup = SPDU_framing();
+//			encodecommond(CommondGroup);
+//			((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessagepro(P_Data_CC, Len_DataInProcess);
+//
+//			HallCommond = 0;
+//			CarrierSend_T = 0;
+//			//
+//
+//			if (state_waitcarrierH == 1) break;
+//		}
+//		if (StopFlagH == 1)
+//		{
+//			pDlg->SetLedOffH(1);
+//			break;
+//		}
+//		while (1)
+//		{
+//			Sleep(1000);
+//			state_acquisitionH = 1;
+//			CBitmap bitmap;
+//			HBITMAP hBmp;
+//			bitmap.LoadBitmap(IDB_BITMAP_RED);
+//			hBmp = (HBITMAP)bitmap.GetSafeHandle();
+//			pDlg->m_led8.SetBitmap(hBmp);
+//			if (state_acquisitionH == 1) break;
+//		}
+//
+//		if (StopFlagH == 1)
+//		{
+//			pDlg->SetLedOffH(1);
+//			break;
+//		}
+//		while (1)
+//		{
+//			Sleep(1000);
+//			SystemTimeH();  //调用获取系统时间函数
+//			CmenuDlg *ppDlg = (CmenuDlg*)AfxGetApp()->m_pMainWnd;
+//			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
+//			ppDlg->m_Hist.ReplaceSel(_T("发送数据\r\n"));
+//			pDlg->banshuanggongsend();
+//
+//			state_senddataH = 1;
+//			CBitmap bitmap;
+//			HBITMAP hBmp;
+//			bitmap.LoadBitmap(IDB_BITMAP_RED);
+//			hBmp = (HBITMAP)bitmap.GetSafeHandle();
+//			pDlg->m_led9.SetBitmap(hBmp);
+//
+//
+//
+//			if (state_senddataH == 1) break;
+//		}
+//		if (StopFlagH == 1)
+//		{
+//			pDlg->SetLedOffH(1);
+//			break;
+//		}
+//		while (1)
+//		{
+//			Sleep(1000);
+//			state_responseendH = 1;
+//			CBitmap bitmap;
+//			HBITMAP hBmp;
+//			bitmap.LoadBitmap(IDB_BITMAP_RED);
+//			hBmp = (HBITMAP)bitmap.GetSafeHandle();
+//			pDlg->m_led10.SetBitmap(hBmp);
+//
+//			//发送终止应答信号
+//			HallCommond = 1;
+//			ResponseSend_T = 1;
+//
+//			CommondGroup = SPDU_framing();
+//			encodecommond(CommondGroup);
+//			((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessagepro(P_Data_CC, Len_DataInProcess);
+//
+//			HallCommond = 0;
+//			ResponseSend_T = 0;
+//			//
+//
+//			if (state_responseendH == 1) break;
+//		}
+//		if (StopFlagH == 1)
+//		{
+//			pDlg->SetLedOffH(1);
+//			break;
+//		}
+//		while (1)
+//		{
+//			Sleep(1000);
+//			state_tailquitH = 1;
+//			CBitmap bitmap;
+//			HBITMAP hBmp;
+//			bitmap.LoadBitmap(IDB_BITMAP_RED);
+//			hBmp = (HBITMAP)bitmap.GetSafeHandle();
+//			pDlg->m_led11.SetBitmap(hBmp);
+//			if (state_tailquitH == 1) break;
+//		}
+//		Sleep(2000);
+//		pDlg->SetLedOffH(1); //将LED灯置黑
+//		break;
+//	}
+//}
 void CHalfDuplexDlg::banshuanggongsend()
 {
 	int *temp, *temp2;
@@ -1012,10 +901,10 @@ void CHalfDuplexDlg::banshuanggongsend()
 /*==================================*/
 //
 // FunctionName : systemtime
-// Description      :  获取系统时间并显示
+// Description    :  获取系统时间并显示
 //
 /*=================================*/
-void SystemTimeH()
+void CHalfDuplexDlg::SystemTime()
 {
 	CString strTime;
 	CTime tm;
