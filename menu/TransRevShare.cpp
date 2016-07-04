@@ -27,6 +27,7 @@ int SetPLExtensions;						//PL扩展
 int ReportSourceSCID;					//报告源SCID
 
 /********************交互指令************************/
+int Token_T;
 int RNMD_T;
 int LNMD_T;
 int Start_Hail_T;
@@ -38,6 +39,7 @@ int CarrierSend_T;
 int ResponseSend_T;
 int WaitCarrier_T;
 
+int Token_R;
 int RNMD_R;
 int LNMD_R;
 int Start_Hail_R;

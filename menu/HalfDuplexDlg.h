@@ -85,4 +85,10 @@ public:
 	int HalfDuplexState;			//当前全双工状态
 	UINT oldTickCount, newTickCount;
 
+
+	//暂时
+	UINT XState;
+	UINT YState;
+	UINT ZState;
+
 };

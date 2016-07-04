@@ -24,6 +24,7 @@ extern int SetPLExtensions;						//PL扩展
 extern int ReportSourceSCID;					//报告源SCID
 
 /********************交互指令************************/
+extern int Token_T;
 extern int RNMD_T;
 extern int LNMD_T;
 extern int Start_Hail_T;
@@ -35,6 +36,7 @@ extern int CarrierSend_T;
 extern int ResponseSend_T;
 extern int WaitCarrier_T;
 
+extern int Token_R;
 extern int RNMD_R;
 extern int LNMD_R;
 extern int Start_Hail_R;

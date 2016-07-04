@@ -88,12 +88,15 @@ int CSimplexDlg::StartRunSimplex(int a)
 	state_inactiveS = 1;   //初始状态
 	m_led1.SetBitmap(m_red);
 
-	hThread = CreateThread(NULL,
-		0,
-		(LPTHREAD_START_ROUTINE)ThreadFuncS,
-		this,
-		0,
-		&ThreadID); //开辟一个线程
+	//hThread = CreateThread(NULL,
+	//	0,
+	//	(LPTHREAD_START_ROUTINE)ThreadFuncS,
+	//	this,
+	//	0,
+	//	&ThreadID); //开辟一个线程
+
+	/*HANDLE m_handle = (HANDLE)_beginthreadex(NULL, 0, ThreadFuncS, NULL, NULL, NULL);*/
+	AfxBeginThread(ThreadFuncS, this, THREAD_PRIORITY_NORMAL,0,0,NULL);
 
 	return 0; //定义的是有返回值的函数，所以需要return 0
 }
@@ -111,7 +114,9 @@ int CSimplexDlg::SetLedOff(int a)
 
 	return 0;
 }
-void ThreadFuncS(LPVOID lpParam)
+
+//void ThreadFuncS(LPVOID lpParam)
+UINT ThreadFuncS(LPVOID lpParam)
 {
 	CSimplexDlg *pDlg = (CSimplexDlg*)lpParam;
 	CmenuDlg *ppDlg = (CmenuDlg*)AfxGetApp()->m_pMainWnd;
@@ -164,7 +169,7 @@ void ThreadFuncS(LPVOID lpParam)
 		pDlg->m_led6.SetBitmap(pDlg->m_red);
 
 		pDlg->dangongsend();
-
+		pDlg->m_led6.SetBitmap(pDlg->m_red);
 
 		pDlg->state_lnmdendS = 1;
 		pDlg->SystemTime();
@@ -204,209 +209,9 @@ void ThreadFuncS(LPVOID lpParam)
 	}
 
 	
-
+	return 0;
 }
-//
-//void ThreadFuncS(LPVOID lpParam)
-//{
-//	CSimplexDlg *pDlg = (CSimplexDlg*)lpParam;
-//	while (StopFlagS == 0)
-//	{
-//		if (StopFlagS == 1)
-//		{
-//			pDlg->SetLedOffS(1);
-//			break;
-//		}
-//		while (1)
-//		{
-//			Sleep(1000);
-//			state_inactiveS = 1;
-//			CBitmap bitmap;
-//			HBITMAP hBmp;
-//			bitmap.LoadBitmap(IDB_BITMAP_RED);
-//			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-//			pDlg->m_led1.SetBitmap(hBmp);
-//			if (state_inactiveS == 1) break;
-//		}
-//		if (StopFlagS == 1)
-//		{
-//			pDlg->SetLedOffS(1);
-//			break;
-//		}
-//		while (1)
-//		{
-//			Sleep(1000);
-//			state_starthailS= 1;
-//			CBitmap bitmap;
-//			HBITMAP hBmp;
-//			bitmap.LoadBitmap(IDB_BITMAP_RED);
-//			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-//			pDlg->m_led2.SetBitmap(hBmp);
-//			if (state_starthailS == 1) break;
-//		}
-//		if (StopFlagS == 1)
-//		{
-//			pDlg->SetLedOffS(1);
-//			break;
-//		}
-//		while (1)
-//		{
-//			Sleep(1000);
-//			state_starthailS = 1;
-//			CBitmap bitmap;
-//			HBITMAP hBmp;
-//			bitmap.LoadBitmap(IDB_BITMAP_RED);
-//			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-//			pDlg->m_led2.SetBitmap(hBmp);
-//			if (state_starthailS == 1) break;
-//		}
-//		if (StopFlagS == 1)
-//		{
-//			pDlg->SetLedOffS(1);
-//			break;
-//		}
-//		while (1)
-//		{
-//			Sleep(1000);
-//			state_hailacquisitionS = 1;
-//			CBitmap bitmap;
-//			HBITMAP hBmp;
-//			bitmap.LoadBitmap(IDB_BITMAP_RED);
-//			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-//			pDlg->m_led3.SetBitmap(hBmp);
-//			if (state_hailacquisitionS == 1) break;
-//		}
-//		if (StopFlagS == 1)
-//		{
-//			pDlg->SetLedOffS(1);
-//			break;
-//		}
-//		while (1)
-//		{
-//			Sleep(1000);
-//			state_carrieronlyS = 1;
-//			CBitmap bitmap;
-//			HBITMAP hBmp;
-//			bitmap.LoadBitmap(IDB_BITMAP_RED);
-//			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-//			pDlg->m_led4.SetBitmap(hBmp);
-//			if (state_carrieronlyS == 1) break;
-//		}
-//		if (StopFlagS == 1)
-//		{
-//			pDlg->SetLedOffS(1);
-//			break;
-//		}
-//		while (1)
-//		{
-//			Sleep(1000);
-//			state_acquisitionS = 1;
-//			CBitmap bitmap;
-//			HBITMAP hBmp;
-//			bitmap.LoadBitmap(IDB_BITMAP_RED);
-//			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-//			pDlg->m_led5.SetBitmap(hBmp);
-//
-//			//向被动方发送握手信号
-//			HallCommond = 1;
-//			CarrierSend_T = 1;
-//
-//			CommondGroup = SPDU_framing();
-//			encodecommond(CommondGroup);
-//			((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessagepro(P_Data_CC, Len_DataInProcess);
-//
-//			HallCommond = 0;
-//			CarrierSend_T = 0;
-//
-//			if (state_acquisitionS == 1) break;
-//		}
-//		if (StopFlagS == 1)
-//		{
-//			pDlg->SetLedOffS(1);
-//			break;
-//		}
-//		while (1)
-//		{
-//			Sleep(1000);
-//
-//			SystemTimeS();  //调用获取系统时间函数
-//			CmenuDlg *ppDlg = (CmenuDlg*)AfxGetApp()->m_pMainWnd;
-//			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
-//			ppDlg->m_Hist.ReplaceSel(_T("发送数据\r\n"));
-//			pDlg->dangongsend();
-//
-//			state_simplexsonS = 1;
-//			CBitmap bitmap;
-//			HBITMAP hBmp;
-//			bitmap.LoadBitmap(IDB_BITMAP_RED);
-//			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-//			pDlg->m_led6.SetBitmap(hBmp);
-//			if (state_simplexsonS == 1) break;
-//		}
-//		if (StopFlagS == 1)
-//		{
-//			pDlg->SetLedOffS(1);
-//			break;
-//		}
-//		while (1)
-//		{
-//			Sleep(4000);
-//			state_lnmdendS = 1;
-//			CBitmap bitmap;
-//			HBITMAP hBmp;
-//			bitmap.LoadBitmap(IDB_BITMAP_RED);
-//			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-//			pDlg->m_led7.SetBitmap(hBmp);
-//
-//			SetControlParameters = 1;
-//			RNMD_T = 1;
-//
-//			CommondGroup = SPDU_framing();
-//			encodecommond(CommondGroup);
-//			((CmenuDlg*)(AfxGetApp()->m_pMainWnd))->SendMessagepro(P_Data_CC, Len_DataInProcess);
-//
-//			SetControlParameters = 0;
-//			RNMD_T = 0;
-//
-//			if (state_lnmdendS == 1) break;
-//		}
-//		if (StopFlagS == 1)
-//		{
-//			pDlg->SetLedOffS(1);
-//			break;
-//		}
-//		while (1)
-//		{
-//			Sleep(1000);
-//			state_simplexsendS = 1;
-//			CBitmap bitmap;
-//			HBITMAP hBmp;
-//			bitmap.LoadBitmap(IDB_BITMAP_RED);
-//			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-//			pDlg->m_led8.SetBitmap(hBmp);
-//			if (state_simplexsendS == 1) break;
-//		}
-//		if (StopFlagS == 1)
-//		{
-//			pDlg->SetLedOffS(1);
-//			break;
-//		}
-//		while (1)
-//		{
-//			Sleep(1000);
-//			state_terminatingtailS = 1;
-//			CBitmap bitmap;
-//			HBITMAP hBmp;
-//			bitmap.LoadBitmap(IDB_BITMAP_RED);
-//			hBmp = (HBITMAP)bitmap.GetSafeHandle();
-//			pDlg->m_led9.SetBitmap(hBmp);
-//			if (state_terminatingtailS == 1) break;
-//		}
-//		Sleep(2000);
-//		pDlg->SetLedOffS(1); //将LED灯置黑
-//		break;
-//	}
-//}
+
 
 void CSimplexDlg::SystemTime()
 {
@@ -593,17 +398,11 @@ void CSimplexDlg::dangongsend()
 	}
 	messagestate = 0;
 	/******设置灯闪烁表示正在发送数据*****/
-	state_simplexsonS = 1;
-	CBitmap bitmap[2];
-	HBITMAP hBmp[2];
-	bitmap[0].LoadBitmap(IDB_BITMAP_RED);
-	hBmp[0] = (HBITMAP)bitmap[0].GetSafeHandle();
-	m_led6.SetBitmap(hBmp[0]);
+	state_simplexsonS = 1;	
+	m_led6.SetBitmap(m_red);
 	Sleep(1000);
 	state_simplexsonS = 0;
-	bitmap[1].LoadBitmap(IDB_BITMAP_GREY);
-	hBmp[1] = (HBITMAP)bitmap[1].GetSafeHandle();
-	m_led6.SetBitmap(hBmp[1]);
+	m_led6.SetBitmap(m_grey);
 	/*************************************/
 	num_frame++;
 	allnumber++;
@@ -702,16 +501,10 @@ void CSimplexDlg::dangongsend()
 		messagestate = 0;
 		/******设置灯闪烁表示正在发送数据*****/
 		state_simplexsonS= 1;
-		CBitmap bitmap[2];
-		HBITMAP hBmp[2];
-		bitmap[0].LoadBitmap(IDB_BITMAP_RED);
-		hBmp[0] = (HBITMAP)bitmap[0].GetSafeHandle();
-		m_led6.SetBitmap(hBmp[0]);
+		m_led6.SetBitmap(m_red);
 		Sleep(1000);
 		state_simplexsonS = 0;
-		bitmap[1].LoadBitmap(IDB_BITMAP_GREY);
-		hBmp[1] = (HBITMAP)bitmap[1].GetSafeHandle();
-		m_led9.SetBitmap(hBmp[1]);
+		m_led9.SetBitmap(m_grey);
 		/*************************************/
 		num_frame++;
 		allnumber++;

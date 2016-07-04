@@ -167,12 +167,12 @@ BOOL CmenuDlg::OnInitDialog()
 	/* 待补充 */
 
 	/********************************设置字体******************************************/
-	font.CreatePointFont(100, _T("微软雅黑")); //创建字体样式，传递100请求10点字体
-	GetDlgItem(IDC_RECODE_STATIC)->SetFont(&font); //将字体传递给静态框
-	GetDlgItem(IDC_IP_STATIC)->SetFont(&font); //将字体传递给静态框
-	GetDlgItem(IDC_PORT_STATIC)->SetFont(&font); //将字体传递给静态框
-	font.CreatePointFont(120, _T("微软雅黑")); //创建字体样式，传递120请求12点字体
-	GetDlgItem(IDC_NUAA_STATIC)->SetFont(&font); //将字体传递给静态框
+	font[0].CreatePointFont(100, _T("微软雅黑")); //创建字体样式，传递100请求10点字体
+	GetDlgItem(IDC_RECODE_STATIC)->SetFont(&font[0]); //将字体传递给静态框
+	GetDlgItem(IDC_IP_STATIC)->SetFont(&font[0]); //将字体传递给静态框
+	GetDlgItem(IDC_PORT_STATIC)->SetFont(&font[0]); //将字体传递给静态框
+	font[1].CreatePointFont(120, _T("微软雅黑")); //创建字体样式，传递120请求12点字体
+	GetDlgItem(IDC_NUAA_STATIC)->SetFont(&font[1]); //将字体传递给静态框
 
 
 	//添加热键
@@ -797,6 +797,7 @@ void CmenuDlg::OnBootsystem()
 	SetPLExtensions = 0;
 	ReportSourceSCID = 0;
 
+	Token_T = 0;
 	RNMD_T = 0;
 	LNMD_T = 0;
 	Start_Hail_T = 0;
@@ -808,6 +809,7 @@ void CmenuDlg::OnBootsystem()
 	ResponseSend_T = 0;
 	WaitCarrier_T = 0;
 
+	Token_R = 0;
 	RNMD_R = 0;
 	LNMD_R = 0;
 	Start_Hail_R = 0;
@@ -848,8 +850,9 @@ void CmenuDlg::OnBootsystem()
 	{
 		CString strFlag[2];
 		m_parameterset.GetDlgItem(IDC_SENDSOUCER_EDIT)->GetWindowText(strFlag[0]);
-		m_parameterset.GetDlgItem(IDC_RECEIVESOUCER_EDIT)->GetWindowText(strFlag[1]);
-		if (strFlag[0].IsEmpty() || strFlag[1].IsEmpty())
+//		m_parameterset.GetDlgItem(IDC_RECEIVESOUCER_EDIT)->GetWindowText(strFlag[1]);
+//		if (strFlag[0].IsEmpty() || strFlag[1].IsEmpty())
+		if (strFlag[0].IsEmpty())
 		{
 			MessageBox(_T("提示：请加载数据源文件！"));			//再判断是否加载了数据源文件
 		}

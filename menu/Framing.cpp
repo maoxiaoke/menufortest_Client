@@ -145,6 +145,7 @@ int* SET_CONTROL(void)
 	}
 	*(Set_Parameters1 + 15) = 1;
 	*(Set_Parameters1 + 11) = RNMD_T;
+	*(Set_Parameters1 + 12) = Token_T;
 	return Set_Parameters1;
 }
 
@@ -259,6 +260,8 @@ void UNFRAMING(int *P_Frame, int len)
 		case 1:
 			if (*(ProtocolData + 11) == 1)
 				RNMD_R = 1;
+			if (*(ProtocolData + 12) == 1)
+				Token_R = 1;
 			break;
 		case 2:
 			break;

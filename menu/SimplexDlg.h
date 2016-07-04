@@ -3,8 +3,9 @@
 #include "afxwin.h"
 #include "ParameterSet.h"
 #include "StatusDisplayDlg.h"
-void ThreadFuncS(LPVOID lpParam); //类外声明线程函数
+//void ThreadFuncS(LPVOID lpParam); //类外声明线程函数
 // CSimplexDlg 对话框
+UINT ThreadFuncS(LPVOID lpParam);
 
 class CSimplexDlg : public CDialogEx
 {
