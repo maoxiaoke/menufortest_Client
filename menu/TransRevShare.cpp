@@ -9,6 +9,7 @@
 #include "TransRevShare.h"
 
 /***************帧**********************/
+int endSystemFlag;				//终止系统标识符
 int validframeflag;					//收到有效帧标识
 
 /***************指令帧**********************/

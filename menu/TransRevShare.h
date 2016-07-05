@@ -7,6 +7,7 @@
 //
 /*======================*/
 
+extern int endSystemFlag;				//终止系统标识符
 extern int validframeflag;					//收到有效帧
 /***************指令帧**********************/
 extern int UorP;						//选择发送U帧还是P帧

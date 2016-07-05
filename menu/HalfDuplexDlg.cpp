@@ -144,12 +144,21 @@ int CHalfDuplexDlg::StartRunHalfDuplex(int a)
 	state_inactiveH = 1;   //初始状态
 	m_led1.SetBitmap(m_red);
 
-	hThread = CreateThread(NULL,
-		0,
-		(LPTHREAD_START_ROUTINE)ThreadFuncH,
-		this,
-		0,
-		&ThreadID); //开辟一个线程
+	//hThread = CreateThread(NULL,
+	//	0,
+	//	(LPTHREAD_START_ROUTINE)ThreadFuncH,
+	//	this,
+	//	0,
+	//	&ThreadID); //开辟一个线程
+	CWinThread * m_pThread;
+	m_pThread = AfxBeginThread(ThreadFuncH, this, THREAD_PRIORITY_NORMAL, 0, 0, NULL);
+	if (NULL == m_pThread)
+	{
+		CmenuDlg *ppDlg = (CmenuDlg*)AfxGetApp()->m_pMainWnd;
+		SystemTime();
+		ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
+		ppDlg->m_Hist.ReplaceSel(_T("Error in Begin a Thread.\r\n"));
+	}
 
 	return 0; //定义的是有返回值的函数，所以需要return 0
 }
@@ -176,7 +185,8 @@ int CHalfDuplexDlg::SetLedOff(int a)
 	return 0;
 }
 
-void ThreadFuncH(LPVOID lpParam)
+//void ThreadFuncH(LPVOID lpParam)
+UINT ThreadFuncH(LPVOID lpParam)
 {
 	CHalfDuplexDlg *pDlg = (CHalfDuplexDlg*)lpParam;
 	CmenuDlg *ppDlg = (CmenuDlg*)AfxGetApp()->m_pMainWnd;
@@ -187,6 +197,11 @@ void ThreadFuncH(LPVOID lpParam)
 		switch (pDlg->HalfDuplexState)
 		{
 		case 11:
+			if (endSystemFlag)
+			{
+				endSystemFlag = 0;
+				pDlg->endSystem();
+			}
 			pDlg->state_starthailH = 1;
 
 			pDlg->SystemTime();
@@ -198,6 +213,11 @@ void ThreadFuncH(LPVOID lpParam)
 			pDlg->HalfDuplexState = 12;
 			break;
 		case 12:
+			if (endSystemFlag)
+			{
+				endSystemFlag = 0;
+				pDlg->endSystem();
+			}
 			pDlg->state_hailacquisitionH = 1;
 
 			pDlg->SystemTime();
@@ -210,6 +230,11 @@ void ThreadFuncH(LPVOID lpParam)
 			break;
 
 		case 13:
+			if (endSystemFlag)
+			{
+				endSystemFlag = 0;
+				pDlg->endSystem();
+			}
 			pDlg->state_haildirectivesH = 1;
 
 			pDlg->SystemTime();
@@ -233,6 +258,11 @@ void ThreadFuncH(LPVOID lpParam)
 			pDlg->HalfDuplexState = 14;
 			break;
 		case 14:
+			if (endSystemFlag)
+			{
+				endSystemFlag = 0;
+				pDlg->endSystem();
+			}
 			pDlg->state_hailtailH = 1;
 
 			pDlg->SystemTime();
@@ -245,6 +275,11 @@ void ThreadFuncH(LPVOID lpParam)
 			break;
 			
 		case 36:
+			if (endSystemFlag)
+			{
+				endSystemFlag = 0;
+				pDlg->endSystem();
+			}
 			pDlg->state_hailresponseH = 1;
 
 			pDlg->SystemTime();
@@ -254,6 +289,10 @@ void ThreadFuncH(LPVOID lpParam)
 			pDlg->oldTickCount = GetTickCount();
 			while (1)
 			{
+				if (endSystemFlag)
+				{
+					break;
+				}
 				pDlg->newTickCount = GetTickCount();
 				if (CarrierSend_R)
 				{
@@ -285,6 +324,11 @@ void ThreadFuncH(LPVOID lpParam)
 			}
 			break;
 		case 60:
+			if (endSystemFlag)
+			{
+				endSystemFlag = 0;
+				pDlg->endSystem();
+			}
 			pDlg->state_receiveDataH = 1;
 
 			pDlg->SystemTime();
@@ -295,6 +339,10 @@ void ThreadFuncH(LPVOID lpParam)
 			pDlg->oldTickCount = GetTickCount();
 			while (1)
 			{
+				if (endSystemFlag)
+				{
+					break;
+				}
 				pDlg->newTickCount = GetTickCount();
 				if (WaitCarrier_R)
 				{
@@ -316,6 +364,11 @@ void ThreadFuncH(LPVOID lpParam)
 			}
 			break;
 		case 51:
+			if (endSystemFlag)
+			{
+				endSystemFlag = 0;
+				pDlg->endSystem();
+			}
 			pDlg->state_waitcarrierH = 1;
 
 			pDlg->SystemTime();
@@ -338,6 +391,11 @@ void ThreadFuncH(LPVOID lpParam)
 			break;
 
 		case 52:
+			if (endSystemFlag)
+			{
+				endSystemFlag = 0;
+				pDlg->endSystem();
+			}
 			pDlg->state_acquisitionH = 1;
 
 			pDlg->SystemTime();
@@ -349,6 +407,11 @@ void ThreadFuncH(LPVOID lpParam)
 			pDlg->HalfDuplexState = 50;
 			break;
 		case 50:
+			if (endSystemFlag)
+			{
+				endSystemFlag = 0;
+				pDlg->endSystem();
+			}
 			pDlg->state_senddataH = 1;
 
 			pDlg->SystemTime();
@@ -360,6 +423,11 @@ void ThreadFuncH(LPVOID lpParam)
 			pDlg->HalfDuplexState = 54;
 			break;
 		case 54:
+			if (endSystemFlag)
+			{
+				endSystemFlag = 0;
+				pDlg->endSystem();
+			}
 			pDlg->state_responseendH = 1;
 
 			pDlg->SystemTime();
@@ -383,6 +451,11 @@ void ThreadFuncH(LPVOID lpParam)
 			break;
 
 		case 55:
+			if (endSystemFlag)
+			{
+				endSystemFlag = 0;
+				pDlg->endSystem();
+			}
 			pDlg->state_tailquitH = 1;
 
 			pDlg->SystemTime();
@@ -404,6 +477,7 @@ void ThreadFuncH(LPVOID lpParam)
 		}
 		
 	}
+	return 0;
 }
 
 
@@ -564,6 +638,10 @@ void CHalfDuplexDlg::banshuanggongsend()
 
 	while (1)
 	{
+		if (endSystemFlag)
+		{
+			break;
+		}
 		if (commondstate == 0)					 //判断此时没有指令发送
 		{
 			messagestate = 1;						//此时发送数据
@@ -634,6 +712,10 @@ void CHalfDuplexDlg::banshuanggongsend()
 			Sleep(4000);
 		}*/
 
+		if (endSystemFlag)
+		{
+			break;
+		}
 		if (n == h)
 		{
 			break;
@@ -666,6 +748,10 @@ void CHalfDuplexDlg::banshuanggongsend()
 
 		while (1)
 		{
+			if (endSystemFlag)
+			{
+				break;
+			}
 			if (commondstate == 0)					 //判断此时没有指令发送
 			{
 				messagestate = 1;						//此时发送数据
@@ -855,4 +941,14 @@ void CHalfDuplexDlg::arqsend(int framecounter)
 		break;
 
 	}
+}
+
+void CHalfDuplexDlg::endSystem()
+{
+	SetLedOff(1);
+	CmenuDlg *ppDlg = (CmenuDlg*)AfxGetApp()->m_pMainWnd;
+	SystemTime();
+	ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
+	ppDlg->m_Hist.ReplaceSel(_T("End the Thread.\r\n"));
+	AfxEndThread(0, TRUE);
 }

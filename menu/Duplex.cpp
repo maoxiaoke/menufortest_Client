@@ -89,12 +89,12 @@ int CDuplex::StartRunDuplex(int a)
 	/************************************************************************/
 	/* 开辟一个线程                                                         */
 	/************************************************************************/
-	hThread = CreateThread(NULL,
-												0,
-												(LPTHREAD_START_ROUTINE)ThreadFunc,
-												this,
-												0,
-												&ThreadID); //开辟一个线程
+	//hThread = CreateThread(NULL,
+	//											0,
+	//											(LPTHREAD_START_ROUTINE)ThreadFunc,
+	//											this,
+	//											0,
+	//											&ThreadID); //开辟一个线程
 												
 	/*CWinThread * m_pThread;
 	m_pThread = AfxBeginThread(ThreadFunc, this);
@@ -103,10 +103,20 @@ int CDuplex::StartRunDuplex(int a)
 		TRACE("创建新的线程出错！\n");
 		return 0;
 	}*/
+	CWinThread * m_pThread;
+	m_pThread = AfxBeginThread(ThreadFunC, this, THREAD_PRIORITY_NORMAL, 0, 0, NULL);
+	if (NULL == m_pThread)
+	{
+		CmenuDlg *ppDlg = (CmenuDlg*)AfxGetApp()->m_pMainWnd;
+		SystemTime();
+		ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
+		ppDlg->m_Hist.ReplaceSel(_T("Error in Begin a Thread.\r\n"));
+	}
 	return 0; //定义的是有返回值的函数，所以需要return 0
 }
 
-void ThreadFunc(LPVOID lpParam)
+//void ThreadFunc(LPVOID lpParam)
+UINT ThreadFunC(LPVOID lpParam)
 {
 	CDuplex *pDlg = (CDuplex *)lpParam;
 	CmenuDlg *ppDlg = (CmenuDlg*)AfxGetApp()->m_pMainWnd;
@@ -118,11 +128,16 @@ void ThreadFunc(LPVOID lpParam)
 		switch (pDlg->DuplexState)
 		{
 		case 31:
+			if (endSystemFlag)
+			{
+				endSystemFlag = 0;
+				pDlg->endSystem();
+			}
 			pDlg->state_starthail = 1;			
 			pDlg->SystemTime();
 				
 			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
-			ppDlg->m_Hist.ReplaceSel(_T("开始握手\r\n"));
+			ppDlg->m_Hist.ReplaceSel(_T("Start Hail Action.\r\n"));
 			pDlg->m_led3.SetBitmap(pDlg->m_red);
 			Sleep(1000);
 
@@ -130,22 +145,32 @@ void ThreadFunc(LPVOID lpParam)
 			break;
 
 		case 32:
+			if (endSystemFlag)
+			{
+				endSystemFlag = 0;
+				pDlg->endSystem();
+			}
 			pDlg->state_hailacquisition = 1;
 			pDlg->SystemTime();
 
 			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
-			ppDlg->m_Hist.ReplaceSel(_T("发送捕获序列\r\n"));
+			ppDlg->m_Hist.ReplaceSel(_T("Send Hail Acquisition.\r\n"));
 			pDlg->m_led4.SetBitmap(pDlg->m_red);
 			Sleep(400);
 
 			pDlg->DuplexState = 33;
 			break;
 		case 33:
+			if (endSystemFlag)
+			{
+				endSystemFlag = 0;
+				pDlg->endSystem();
+			}
 			pDlg->state_haildirectives = 1;		
 			pDlg->SystemTime();
 
 			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
-			ppDlg->m_Hist.ReplaceSel(_T("发送握手指令\r\n"));
+			ppDlg->m_Hist.ReplaceSel(_T("Send Hail Directives.\r\n"));
 			pDlg->m_led5.SetBitmap(pDlg->m_red);
 			
 			//向响应方发送握手指令
@@ -164,22 +189,32 @@ void ThreadFunc(LPVOID lpParam)
 			pDlg->DuplexState = 34;
 			break;
 		case 34:
+			if (endSystemFlag)
+			{
+				endSystemFlag = 0;
+				pDlg->endSystem();
+			}
 			pDlg->state_hailtail = 1;
 			pDlg->SystemTime();
 
 			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
-			ppDlg->m_Hist.ReplaceSel(_T("发送握手尾序列\r\n"));
+			ppDlg->m_Hist.ReplaceSel(_T("Send Hail Tail.\r\n"));
 			pDlg->m_led6.SetBitmap(pDlg->m_red);
 			Sleep(50);
 
 			pDlg->DuplexState = 35;
 			break;
 		case 35:
+			if (endSystemFlag)
+			{
+				endSystemFlag = 0;
+				pDlg->endSystem();
+			}
 			pDlg->state_waithail = 1;			
 			pDlg->SystemTime();
 
 			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
-			ppDlg->m_Hist.ReplaceSel(_T("等待握手响应\r\n"));
+			ppDlg->m_Hist.ReplaceSel(_T("Wait for Hail Response.\r\n"));
 			
 
 //			validframeflag = 1;
@@ -188,6 +223,10 @@ void ThreadFunc(LPVOID lpParam)
 			pDlg->oldTickCount = GetTickCount();
 			while (1)
 			{
+				if (endSystemFlag)
+				{
+					break;
+				}
 				pDlg->newTickCount = GetTickCount();
 				if (Hailresponse_R)
 //				if (validframeflag == 1)
@@ -217,22 +256,32 @@ void ThreadFunc(LPVOID lpParam)
 			}
 			break;
 		case 41:
+			if (endSystemFlag)
+			{
+				endSystemFlag = 0;
+				pDlg->endSystem();
+			}
 			pDlg->state_carrieronly = 1;			
 			pDlg->SystemTime();
 
 			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
-			ppDlg->m_Hist.ReplaceSel(_T("载波同步\r\n"));
+			ppDlg->m_Hist.ReplaceSel(_T("Radiate Carrier Only.\r\n"));
 			pDlg->m_led8.SetBitmap(pDlg->m_red);
 			Sleep(1000);
 
 			pDlg->DuplexState = 42;
 			break;
 		case 42:
+			if (endSystemFlag)
+			{
+				endSystemFlag = 0;
+				pDlg->endSystem();
+			}
 			pDlg->state_acquisition = 1;			
 			pDlg->SystemTime();
 
 			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
-			ppDlg->m_Hist.ReplaceSel(_T("发送空闲序列\r\n"));
+			ppDlg->m_Hist.ReplaceSel(_T("Radiate Acquisiton.\r\n"));
 			pDlg->m_led9.SetBitmap(pDlg->m_red);
 			Sleep(400);
 
@@ -240,19 +289,29 @@ void ThreadFunc(LPVOID lpParam)
 			break;
 
 		case 40:
+			if (endSystemFlag)
+			{
+				endSystemFlag = 0;
+				pDlg->endSystem();
+			}
 			pDlg->state_duplexon = 1;
 			pDlg->SystemTime();
 
 			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
-			ppDlg->m_Hist.ReplaceSel(_T("双向数据传递\r\n"));
+			ppDlg->m_Hist.ReplaceSel(_T("Data Services.\r\n"));
 			pDlg->m_led10.SetBitmap(pDlg->m_red);
 
 			pDlg->shuanggongsend();
 
+			if (endSystemFlag)
+			{
+				endSystemFlag = 0;
+				pDlg->endSystem();
+			}
 			pDlg->state_lnmdend = 1;
 			pDlg->SystemTime();
 			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
-			ppDlg->m_Hist.ReplaceSel(_T("本地发送完成\r\n"));
+			ppDlg->m_Hist.ReplaceSel(_T("Receive LNMD.\r\n"));
 			pDlg->m_led11.SetBitmap(pDlg->m_red);
 
 			//发送本地无数据发送指令
@@ -268,12 +327,16 @@ void ThreadFunc(LPVOID lpParam)
 			pDlg->oldTickCount = GetTickCount();
 			while (1)
 			{
+				if (endSystemFlag)
+				{
+					break;
+				}
 				pDlg->newTickCount = GetTickCount();
 				if (RNMD_R)
 				{
 					pDlg->SystemTime();
 					ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
-					ppDlg->m_Hist.ReplaceSel(_T("收到远程RNMD\r\n"));
+					ppDlg->m_Hist.ReplaceSel(_T("Receive RNMD\r\n"));
 					RNMD_R = 0;
 					break;
 				}
@@ -284,25 +347,40 @@ void ThreadFunc(LPVOID lpParam)
 				}
 			}
 
+			if (endSystemFlag)
+			{
+				endSystemFlag = 0;
+				pDlg->endSystem();
+			}
 			pDlg->state_rnmdend = 1;			
 			pDlg->SystemTime();
 			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
-			ppDlg->m_Hist.ReplaceSel(_T("远程发送完成\r\n"));
+			ppDlg->m_Hist.ReplaceSel(_T("Receive RNMD.\r\n"));
 			pDlg->m_led12.SetBitmap(pDlg->m_red);
 
+			if (endSystemFlag)
+			{
+				endSystemFlag = 0;
+				pDlg->endSystem();
+			}
 			pDlg->state_duplexend = 1;
 			pDlg->SystemTime();
 			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
-			ppDlg->m_Hist.ReplaceSel(_T("数据发送完成\r\n"));
+			ppDlg->m_Hist.ReplaceSel(_T("Session Termination.\r\n"));
 			pDlg->m_led13.SetBitmap(pDlg->m_red);
 
 			pDlg->DuplexState = 45;
 			break;
 		case 45:
+			if (endSystemFlag)
+			{
+				endSystemFlag = 0;
+				pDlg->endSystem();
+			}
 			pDlg->state_terminatingtail = 1;			
 			pDlg->SystemTime();
 			ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
-			ppDlg->m_Hist.ReplaceSel(_T("发送尾序列\r\n"));
+			ppDlg->m_Hist.ReplaceSel(_T("Terminating Tail.\r\n"));
 			pDlg->m_led14.SetBitmap(pDlg->m_red);
 			Sleep(50);
 			break;
@@ -316,6 +394,7 @@ void ThreadFunc(LPVOID lpParam)
 			break;
 		}
 	}
+	return 0;
 }
 
 //
@@ -498,6 +577,10 @@ void CDuplex::shuanggongsend()
 
 	while (1)
 	{
+		if (endSystemFlag)
+		{
+			break;
+		}
 		if (commondstate == 0)					 //判断此时没有指令发送
 		{
 			messagestate = 1;						//此时发送数据
@@ -530,6 +613,10 @@ void CDuplex::shuanggongsend()
 
 	while (1)
 	{
+		if (endSystemFlag)
+		{
+			break;
+		}
 		if (arqreceiveflag == 1)
 		{
 			arqreceiveflag = 0;
@@ -949,3 +1036,12 @@ BOOL CDuplex::OnInitDialog()
 //{
 //	SetTimer(1, 200, NULL);
 //}
+void CDuplex::endSystem()
+{
+	SetLedOff(1);
+	CmenuDlg *ppDlg = (CmenuDlg*)AfxGetApp()->m_pMainWnd;
+	SystemTime();
+	ppDlg->m_Hist.SetSel(ppDlg->m_Hist.GetWindowTextLength(), -1); //获取当前编辑框字符
+	ppDlg->m_Hist.ReplaceSel(_T("End the Thread.\r\n"));
+	AfxEndThread(0, TRUE);
+}

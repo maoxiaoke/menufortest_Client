@@ -74,4 +74,5 @@ public:
 
 
 	virtual BOOL OnInitDialog();
+	inline void endSystem();
 };

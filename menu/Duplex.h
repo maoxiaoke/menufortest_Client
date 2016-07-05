@@ -3,7 +3,8 @@
 #include "ParameterSet.h"
 
 //UINT ThreadFunc(LPVOID lpParam);
-void ThreadFunc(LPVOID lpParam); //类外声明线程函数
+//void ThreadFunc(LPVOID lpParam); //类外声明线程函数
+UINT ThreadFunC(LPVOID lpParam);
 
 
 // CDuplex 对话框
@@ -88,6 +89,7 @@ public:
 	int DuplexState;			//当前全双工状态
 	virtual BOOL OnInitDialog();
 //	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	inline void endSystem();
 
 	UINT oldTickCount, newTickCount;
 //	void SetTimerDuplex();

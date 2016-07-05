@@ -5,7 +5,8 @@
 
 
 // CHalfDuplexDlg 对话框
-void ThreadFuncH(LPVOID lpParam); //类外声明线程函数
+//void ThreadFuncH(LPVOID lpParam); //类外声明线程函数
+UINT ThreadFuncH(LPVOID lpParam);
 
 class CHalfDuplexDlg : public CDialogEx
 {
@@ -90,5 +91,7 @@ public:
 	UINT XState;
 	UINT YState;
 	UINT ZState;
+
+	inline void endSystem();
 
 };
